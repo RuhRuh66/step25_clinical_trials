@@ -1,6 +1,11 @@
 #include <iostream>
+#include "HttpClient.hpp"
+
 
 int main() {
-    std::cout << "Step25 started\n";
+    HttpResponse response;
+    
+    std::cout << "initial HTTP status: " << response.status_code << '\n';
+
     return 0;
 }
