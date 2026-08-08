@@ -3,6 +3,7 @@
 #include <string>
 #include <nlohmann/json.hpp>
 #include <vector>
+#include <filesystem>
 
 namespace {
 struct Study {
@@ -64,6 +65,13 @@ int main() {
                             "?query.cond=interstitial+lung+disease"
                             "&pageSize=5"
                             "&format=json";
+
+    const std::filesystem::path cache_path = std::filesystem::path("data") / "studies.json";
+    if (std::filesystem::exists(cache_path)) {
+        std::cout << "cache exists: " << cache_path.string() << '\n';
+    } else {
+        std::cout << "cache not found: " << cache_path.string() << '\n';
+    }
                             
     const CURLcode result = Http_get(url, response);
 
