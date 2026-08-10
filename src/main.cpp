@@ -4,6 +4,8 @@
 #include <nlohmann/json.hpp>
 #include <vector>
 #include <filesystem>
+#include <fstream>
+
 
 namespace {
 struct Study {
@@ -67,6 +69,9 @@ int main() {
                             "&format=json";
 
     const std::filesystem::path cache_path = std::filesystem::path("data") / "studies.json";
+
+    std::filesystem::create_directories(cache_path.parent_path());
+
     if (std::filesystem::exists(cache_path)) {
         std::cout << "cache exists: " << cache_path.string() << '\n';
     } else {
@@ -84,6 +89,14 @@ int main() {
         std::cerr << "HTTP failed: " << response.status_code << '\n';
         return 1;
     }
+
+    std::ofstream output_file(cache_path);
+    if (!output_file) {
+        std::cerr << "failed to open cache file\n";
+        return 1;
+    }
+
+    output_file << response.data;
 
     std::cout << "HTTP status: " << response.status_code << '\n';
 
